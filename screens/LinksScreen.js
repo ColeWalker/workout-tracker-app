@@ -3,8 +3,16 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
+import { useSelector } from 'react-redux';
 
 export default function LinksScreen() {
+  const days = useSelector( state=> state.days);
+  const now = new Date();
+  //int 0->6, 0=Sunday
+  const dayOfWeek = now.getDay(); 
+  const dayState= useSelector(state=> state.days[dayOfWeek])
+  
+  
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <OptionButton
@@ -25,6 +33,9 @@ export default function LinksScreen() {
         onPress={() => WebBrowser.openBrowserAsync('https://forums.expo.io')}
         isLastOption
       />
+      {days.map((day, index)=><Text key={index}>{day.day}</Text>)} 
+      <Text>{dayState.day}</Text>
+  {dayState.exercises.map((exercise, index)=><Text key={index}>{exercise.title}</Text>)}
     </ScrollView>
   );
 }
