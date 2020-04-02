@@ -1,5 +1,7 @@
 import {createStore} from 'redux'
 import rootReducer from './reducers'
+import { persistStore, persistReducer } from 'redux-persist';
+import {AsyncStorage} from 'react-native';
 
 const initialState = {
     days:[
@@ -106,4 +108,17 @@ const initialState = {
 
 };
 
-export const store = createStore(rootReducer, initialState);
+
+
+
+
+
+const persistConfig = {
+    key: 'root',
+    storage: AsyncStorage,
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = createStore(persistedReducer, initialState);
+export const persistor = persistStore(store);
