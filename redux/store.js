@@ -79,7 +79,13 @@ const initialState = {
                     type: "weight",
                     reps: 5,
                     sets: 3,
-
+                }, 
+                {
+                    title:"Test",
+                    weight: 125,
+                    type: "weight",
+                    reps: 5,
+                    sets: 3,
                 }
             ]
         },
