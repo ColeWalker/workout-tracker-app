@@ -10,19 +10,20 @@ const DailyScreen = (props) => {
     const dayOfWeek = now.getDay(); 
     const [addModalVisible, setAddModalVisible] = useState(false)
     const [addedExerciseTitle, setAddedExerciseTitle] = useState("title");
+    const [addedExerciseWeight, setAddedExerciseWeight] = useState(0);
 
-    const dayState = useSelector(state=> state.days[dayOfWeek]);
     let workoutDay = useSelector(state=> state.days[dayOfWeek].day);
     let exercises = useSelector(state=> state.days[dayOfWeek].exercises);  
 
     const dispatch = useDispatch();
-    const add_exercise = (title) => { 
+    const add_exercise = (title, weight) => { 
         return(dispatch(addExercise(dayOfWeek, {
             title: "" + title,
-            weight: 125,
+            weight: Number(weight),
             type: "weight",
             reps: 5,
-            sets: 3,})))
+            sets: 3,
+        })))
     };
     
     const delete_exercise = (index) => {
@@ -36,6 +37,7 @@ const DailyScreen = (props) => {
                 return(
                     <View key={index}>
                         <Text>{exercise.title}</Text>
+                        <Text>{exercise.weight}</Text>
                         <Button onPress={()=>{delete_exercise(index)}} title="Delete this!"/>
                     </View>
                 )
@@ -52,8 +54,11 @@ const DailyScreen = (props) => {
                 <TextInput 
                 style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                 onChangeText={text => setAddedExerciseTitle(text)} value={addedExerciseTitle}></TextInput>
+                <TextInput 
+                style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 10 }}
+                onChangeText={text => setAddedExerciseWeight(text)} value={addedExerciseWeight}></TextInput>
                 <Button title="Close Modal Without Saving" onPress={()=>{setAddModalVisible(false)}}/>
-                <Button title="Save Exercise" onPress={()=>{add_exercise(addedExerciseTitle); setAddModalVisible(false);}}/>
+                <Button title="Save Exercise" onPress={()=>{add_exercise(addedExerciseTitle, addedExerciseWeight); setAddModalVisible(false);}}/>
             </Modal>
 
         </ScrollView> 
