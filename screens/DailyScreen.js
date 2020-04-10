@@ -1,70 +1,165 @@
 import React, {useCallback, useState} from 'react';
 import { StyleSheet, Text, View, Button, ScrollView, Modal, TextInput } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { addExercise, deleteExercise } from '../redux/actions';
+import { addExercise, deleteExercise, editExercise, completeExercise } from '../redux/actions';
+import { Ionicons } from '@expo/vector-icons';
+import Exercise from '../components/Exercise';
+import AddModal from '../components/AddModal';
+import MoreOptionsModal from '../components/MoreOptionsModal';
+import {useNavigation } from '@react-navigation/native'
 
 
 const DailyScreen = (props) => {
-    const now = new Date();
-    //int 0->6, 0=Sunday
-    const dayOfWeek = now.getDay(); 
-    const [addModalVisible, setAddModalVisible] = useState(false)
-    const [addedExerciseTitle, setAddedExerciseTitle] = useState("title");
-    const [addedExerciseWeight, setAddedExerciseWeight] = useState(0);
+    const navigation = useNavigation();
 
-    let workoutDay = useSelector(state=> state.days[dayOfWeek].day);
+    const now = new Date();
+    //int 0-6, 0=Sunday
+    const dayOfWeek = now.getDay(); 
+
+    //Edit/Delete Modal 
+    const [modalContext, setModalContext] = useState({});
+    const [moreOptionsModalVisible, setMoreOptionsModalVisible] = useState(false);
+ 
+    //Add Modal
+    const [addModalVisible, setAddModalVisible] = useState(false);
+
+    let workoutDay = useSelector(state=> state.days[dayOfWeek].day); 
     let exercises = useSelector(state=> state.days[dayOfWeek].exercises);  
 
     const dispatch = useDispatch();
-    const add_exercise = (title, weight) => { 
+    const add_exercise = (title, weight, reps, sets) => { 
         return(dispatch(addExercise(dayOfWeek, {
             title: "" + title,
             weight: Number(weight),
             type: "weight",
-            reps: 5,
-            sets: 3,
+            reps: Number(reps),
+            sets: Number(sets),
+            complete: false,
+            id: new Date(),
         })))
     };
     
-    const delete_exercise = (index) => {
-        return (dispatch(deleteExercise(dayOfWeek, index)));
+    const delete_exercise = (exerciseId) => {
+        return (dispatch(deleteExercise(dayOfWeek, exerciseId)));
     }
 
-    return (
-        <ScrollView>
-            <Text>{workoutDay}</Text>
-            {exercises.map((exercise, index)=>{
-                return(
-                    <View key={index}>
-                        <Text>{exercise.title}</Text>
-                        <Text>{exercise.weight}</Text>
-                        <Button onPress={()=>{delete_exercise(index)}} title="Delete this!"/>
-                    </View>
-                )
-            })}
-            <Button onPress={()=>{setAddModalVisible(true)}} title="Click Me" /> 
-            <Modal
-                transparent={false}
-                visible={addModalVisible}
-                onRequestClose={() => {
-                    
-                  }}
-            >   
-                <Text>Modal is visible</Text>
-                <TextInput 
-                style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                onChangeText={text => setAddedExerciseTitle(text)} value={addedExerciseTitle}></TextInput>
-                <TextInput 
-                style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 10 }}
-                onChangeText={text => setAddedExerciseWeight(text)} value={addedExerciseWeight}></TextInput>
-                <Button title="Close Modal Without Saving" onPress={()=>{setAddModalVisible(false)}}/>
-                <Button title="Save Exercise" onPress={()=>{add_exercise(addedExerciseTitle, addedExerciseWeight); setAddModalVisible(false);}}/>
-            </Modal>
+    const edit_exercise = (exerciseId, newExercise)=>{
+        return (dispatch(editExercise(dayOfWeek, exerciseId, newExercise)));
+    }
+    
+    const complete_exercise = (exerciseId)=>{
+        return (dispatch(completeExercise(dayOfWeek, exerciseId)));
+    }
 
+    const exerciseModalHandler = (exercise) =>{
+        setModalContext(exercise);
+        setMoreOptionsModalVisible(true);
+    }
+
+    const addModalAddExerciseHandler = (addedExerciseTitle, addedExerciseWeight, addedExerciseRepsCount, addedExerciseSetsCount) =>{
+        add_exercise(addedExerciseTitle, addedExerciseWeight, addedExerciseRepsCount, addedExerciseSetsCount); 
+        setAddModalVisible(false);
+    }
+
+    const closeAddModalHandler = () =>{
+        setAddModalVisible(false);
+    }
+    const closeMoreOptionsModalHandler= ()=>{
+        setMoreOptionsModalVisible(false);
+    }
+
+    const moreOptionsModalEditHandler = (context, newDetails) =>{
+        edit_exercise(context.id, {
+            title: newDetails.exerciseTitle,
+            weight: newDetails.exerciseWeight,
+            type: newDetails.type,
+            reps: Number(newDetails.exerciseRepsCount),
+            sets: Number(newDetails.exerciseSetsCount),
+            complete: context.complete,
+            id: context.id,
+            }
+        );
+        setMoreOptionsModalVisible(false);
+    }
+
+    const moreOptionsModalDeleteHandler = (exerciseId)=>{
+        delete_exercise(exerciseId);
+        setMoreOptionsModalVisible(false);
+    }
+
+    // React.useLayoutEffect(()=>{
+    //     navigation.setOptions({
+    //         headerRight: ()=>(
+    //             <View style={styles.addButtonWrapper}>
+    //             <Button style={styles.addButton} onPress={()=>{setAddModalVisible(true)}} title="Add Exercise" />
+    //         </View> 
+    //         ),
+    //     }, [navigation])
+    // })
+
+    return (
+        <ScrollView style={styles.bodyWrapper}>
+            <View style={styles.addButtonWrapper}>
+                <Button style={styles.addButton} onPress={()=>{setAddModalVisible(true)}} title="+ Add Exercise" />
+            </View> 
+
+            {exercises.map((exercise)=>{
+                return(
+                    <React.Fragment key={exercise.id} >
+                        <Exercise
+                            exercise={exercise}
+                            modalHandler={exerciseModalHandler}
+                            completeHandler={complete_exercise}
+                        >
+                        </Exercise>
+                    </React.Fragment>
+                )
+            
+            })}
+
+         
+            
+            <MoreOptionsModal
+                moreOptionsModalVisible={moreOptionsModalVisible}
+                editExerciseHandler={moreOptionsModalEditHandler}
+                deleteExerciseHandler={moreOptionsModalDeleteHandler}
+                exercise={modalContext}
+                closeMoreOptionsModalHandler={closeMoreOptionsModalHandler}
+            />
+
+           <AddModal 
+                addModalVisible={addModalVisible}
+                addExerciseHandler={addModalAddExerciseHandler}
+                closeAddModalHandler={closeAddModalHandler}
+           />
         </ScrollView> 
     )
 }
 
 export default DailyScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    bodyWrapper:{
+        backgroundColor: "#FAF9FE",
+        flex:1,
+        paddingHorizontal: 40,
+    },
+    deleteButton:{
+        marginBottom:20,
+        marginTop:20,
+    },
+    addButtonWrapper:{
+        paddingHorizontal: 10,
+        paddingTop: 10,
+        marginBottom: 25,
+    },
+    addButton:{
+        borderRadius: 25,
+        paddingVertical: 20,
+    },
+    modalWrapper:{
+        paddingHorizontal:10,
+        paddingVertical: 20,
+    }
+   
+});

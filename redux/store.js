@@ -8,98 +8,42 @@ const initialState = {
         {
             day:"Sunday",
             exercises:[
-                {
-                    title:"Test",
-                    weight: 125,
-                    type: "weight",
-                    reps: 5,
-                    sets: 3,
-
-                }
+               
             ]
         },
         {
             day:"Monday",
             exercises:[
-                {
-                    title:"Test",
-                    weight: 125,
-                    type: "weight",
-                    reps: 5,
-                    sets: 3,
-
-                }
+               
             ]
         },
         {
             day:"Tuesday",
             exercises:[
-                {
-                    title:"Test",
-                    weight: 125,
-                    type: "weight",
-                    reps: 5,
-                    sets: 3,
-
-                }
+                
             ]
         },
         {
             day:"Wednesday",
             exercises:[
-                {
-                    title:"Test",
-                    weight: 125,
-                    type: "weight",
-                    reps: 5,
-                    sets: 3,
-
-                }
+              
             ]
         },
         {
             day:"Thursday",
             exercises:[
-                {
-                    title:"Test",
-                    weight: 125,
-                    type: "weight",
-                    reps: 5,
-                    sets: 3,
-
-                }
+               
             ]
         },
         {
             day:"Friday",
             exercises:[
-                {
-                    title:"Test",
-                    weight: 125,
-                    type: "weight",
-                    reps: 5,
-                    sets: 3,
-                }, 
-                {
-                    title:"Test",
-                    weight: 125,
-                    type: "weight",
-                    reps: 5,
-                    sets: 3,
-                }
+               
             ]
         },
         {
             day:"Saturday",
             exercises:[
-                {
-                    title:"Test",
-                    weight: 125,
-                    type: "weight",
-                    reps: 5,
-                    sets: 3,
-
-                }
             ]
         },
         
