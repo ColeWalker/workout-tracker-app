@@ -31,8 +31,6 @@ const Exercise = (props) => {
                     <Text style={styles.weight}>{exercise.weight}lbs</Text>
                     <Text style={styles.repsAndSets}>{exercise.sets} sets of {exercise.reps} reps</Text>
                 </View>
-                <Text>Id: {exercise.id}</Text>
-                <Text>Completed: {"" + exercise.complete}</Text>
             </View>
             <View style={styles.exerciseRight}>
                 <Ionicons.Button 
