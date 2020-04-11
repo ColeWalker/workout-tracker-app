@@ -27,8 +27,9 @@ const DailyScreen = (props) => {
     let exercises = useSelector(state=> state.days[dayOfWeek].exercises);  
 
     const dispatch = useDispatch();
-    const add_exercise = (title, weight, reps, sets) => { 
-        return(dispatch(addExercise(dayOfWeek, {
+    const add_exercise = (title, weight, reps, sets, type, distance) => { 
+       if(type=="weight"){ 
+           return(dispatch(addExercise(dayOfWeek, {
             title: "" + title,
             weight: Number(weight),
             type: "weight",
@@ -36,6 +37,15 @@ const DailyScreen = (props) => {
             sets: Number(sets),
             complete: false,
         })))
+        }
+        else{
+            return(dispatch(addExercise(dayOfWeek, {
+                title: "" + title,
+                type: "distance",
+                distance: (Number(distance)),
+                complete:false,
+            })))
+        }
     };
     
     const delete_exercise = (exerciseId) => {
@@ -55,8 +65,9 @@ const DailyScreen = (props) => {
         setMoreOptionsModalVisible(true);
     }
 
-    const addModalAddExerciseHandler = (addedExerciseTitle, addedExerciseWeight, addedExerciseRepsCount, addedExerciseSetsCount) =>{
-        add_exercise(addedExerciseTitle, addedExerciseWeight, addedExerciseRepsCount, addedExerciseSetsCount); 
+    const addModalAddExerciseHandler = (addedExerciseTitle, addedExerciseWeight, addedExerciseRepsCount, addedExerciseSetsCount, addedExerciseType, addedExerciseDistance) =>{
+        add_exercise(addedExerciseTitle, addedExerciseWeight, addedExerciseRepsCount,
+             addedExerciseSetsCount, addedExerciseType, addedExerciseDistance); 
         setAddModalVisible(false);
     }
 
@@ -68,19 +79,31 @@ const DailyScreen = (props) => {
     }
 
     const moreOptionsModalEditHandler = (context, newDetails) =>{
-        edit_exercise(context.id, {
-            title: newDetails.exerciseTitle,
-            weight: newDetails.exerciseWeight,
-            type: newDetails.type,
-            reps: Number(newDetails.exerciseRepsCount),
-            sets: Number(newDetails.exerciseSetsCount),
-            complete: context.complete,
-            id: context.id,
-            }
-        );
+        if(newDetails.type=="weight"){
+            edit_exercise(context.id, {
+                title: newDetails.exerciseTitle,
+                weight: newDetails.exerciseWeight,
+                type: newDetails.type,
+                reps: Number(newDetails.exerciseRepsCount),
+                sets: Number(newDetails.exerciseSetsCount),
+                complete: context.complete,
+                id: context.id,
+                }
+            );
+        }
+        else{
+            edit_exercise(context.id, {
+                title: newDetails.exerciseTitle,
+                type: newDetails.type,
+                complete: context.complete,
+                id: context.id,
+                distance: newDetails.distance
+                }
+            );
+        }
         setMoreOptionsModalVisible(false);
     }
-
+    
     const moreOptionsModalDeleteHandler = (exerciseId)=>{
         delete_exercise(exerciseId);
         setMoreOptionsModalVisible(false);

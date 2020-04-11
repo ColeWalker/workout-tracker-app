@@ -49,11 +49,13 @@ const initialState = {
         
     ],
     stats: {
-        weightLifted: 15,
-        distance: 150,
-        repsCompleted: 150,
-        setsCompleted: 200,
-        exercisesCompleted: 15,
+        level: 1,
+        xp: 0,
+        weightLifted: 0,
+        distance: 0,
+        repsCompleted: 0,
+        setsCompleted: 0,
+        exercisesCompleted: 0,
     }
 
 };

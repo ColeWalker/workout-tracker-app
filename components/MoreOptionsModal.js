@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { StyleSheet, Text, ScrollView, TextInput, Button, View, Modal } from 'react-native'
+import { Picker,StyleSheet, Text, ScrollView, TextInput, Button, View, Modal } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
 const MoreOptionsModal = (props) => {
@@ -13,16 +13,25 @@ const MoreOptionsModal = (props) => {
     const [editedExerciseWeight, setEditedExerciseWeight] =exercise.weight ? useState(exercise.weight) : useState(15);
     const [editedExerciseRepsCount, setEditedExerciseRepsCount] = exercise.reps ? useState(exercise.reps) : useState(15);
     const [editedExerciseSetsCount, setEditedExerciseSetsCount] = exercise.sets ? useState(exercise.sets) : useState(3);
-
-
+    const [editedExerciseDistance, setEditedExerciseDistance] = exercise.distance ? useState(exercise.distance) : useState(0);
+    const [editedExerciseType, setEditedExerciseType ] = exercise.type ? useState(exercise.type) : useState("weight");
+    
     const editExerciseHandlerCaller = () => {
-        editExerciseHandler(exercise, {
-            exerciseTitle: editedExerciseTitle,
-            exerciseWeight: editedExerciseWeight,
-            exerciseRepsCount: editedExerciseRepsCount,
-            exerciseSetsCount: editedExerciseSetsCount,
-            type: "weight",
-        });
+       if(editedExerciseType=="weight"){ 
+           editExerciseHandler(exercise, {
+                exerciseTitle: editedExerciseTitle,
+                exerciseWeight: editedExerciseWeight,
+                exerciseRepsCount: editedExerciseRepsCount,
+                exerciseSetsCount: editedExerciseSetsCount,
+                type: "weight",
+            });
+        }
+        else{
+            editExerciseHandler(exercise, {
+                type: "distance",
+                distance: editedExerciseDistance
+            });
+        }
     }
 
     const deleteExerciseHandlerCaller=()=>{
@@ -33,6 +42,8 @@ const MoreOptionsModal = (props) => {
         exercise.weight ? setEditedExerciseWeight(exercise.weight) : setEditedExerciseWeight(15);
         exercise.reps ? setEditedExerciseRepsCount(exercise.reps) : setEditedExerciseRepsCount(15);
         exercise.sets ? setEditedExerciseSetsCount(exercise.sets) : setEditedExerciseSetsCount(3);
+        exercise.distance ? setEditedExerciseDistance(exercise.distance) : setEditedExerciseDistance(0);
+        exercise.type ? setEditedExerciseType(exercise.type) : setEditedExerciseType("weight");
     }
     return (
         <Modal
@@ -58,33 +69,62 @@ const MoreOptionsModal = (props) => {
                         ></Ionicons.Button>
                     </View>
                 </View>
+                <Picker
+                    selectedValue={editedExerciseType}
+                    onValueChange={(itemValue) => setEditedExerciseType(itemValue)}
+                    style={styles.Input}
+                >
+                    <Picker.Item 
+                        label="Weight"
+                        value="weight"
+                    />
+                    <Picker.Item 
+                        label="Distance"
+                        value="distance"
+                    />
+                </Picker>
+
                 <Text style={styles.Label}>Title</Text>
 
                 <TextInput 
-                style={styles.Input}
-                onChangeText={text => setEditedExerciseTitle(text)} 
-                value={editedExerciseTitle}></TextInput>
+                    style={styles.Input}
+                    onChangeText={text => setEditedExerciseTitle(text)} 
+                    value={editedExerciseTitle}
+                />
 
-                <Text style={styles.Label}>Weight (lbs)</Text>
-
-                <TextInput 
-                style={styles.Input}
-                onChangeText={text => setEditedExerciseWeight(text)} value={"" + editedExerciseWeight}></TextInput>
-
-                <Text style={styles.Label}>Reps</Text>
-
-                <TextInput 
-                style={styles.Input}
-                onChangeText={text => setEditedExerciseRepsCount(text)} 
-                value={"" + editedExerciseRepsCount}></TextInput>
-
-                <Text style={styles.Label}>Sets</Text>
-
-                <TextInput 
-                style={styles.Input}
-                onChangeText={text => setEditedExerciseSetsCount(text)} 
-                value={"" + editedExerciseSetsCount}></TextInput>
-                
+               { editedExerciseType=="weight" ? <View>
+                    <Text style={styles.Label}>Weight (lbs)</Text>
+    
+                    <TextInput 
+                        style={styles.Input}
+                        onChangeText={text => setEditedExerciseWeight(text)} value={"" + editedExerciseWeight}
+                    />
+    
+                    <Text style={styles.Label}>Reps</Text>
+    
+                    <TextInput 
+                    style={styles.Input}
+                        onChangeText={text => setEditedExerciseRepsCount(text)} 
+                        value={"" + editedExerciseRepsCount}
+                    />
+    
+                    <Text style={styles.Label}>Sets</Text>
+    
+                    <TextInput 
+                        style={styles.Input}
+                        onChangeText={text => setEditedExerciseSetsCount(text)} 
+                        value={"" + editedExerciseSetsCount}
+                    />
+                    
+                </View> : <View>
+                    <Text style={styles.Label}>Distance (mi)</Text>
+                    <TextInput 
+                        style={styles.Input}
+                        onChangeText={text => setEditedExerciseDistance(text)} 
+                        value={"" + editedExerciseDistance}
+                    />
+                </View>
+                }
                 <View
                     style={styles.ButtonWrapper}
                 >

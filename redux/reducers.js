@@ -1,5 +1,5 @@
 import { ADD_EXERCISE, DELETE_EXERCISE, EDIT_EXERCISE, COMPLETE_EXERCISE } from './actions';
-
+import { handleCountingStats,calculateEarnedXp, hasLeveledUp, levelUp } from '../functions/stats'
 
 export default rootReducer = (state, action) =>{
     switch(action.type){
@@ -55,21 +55,35 @@ export default rootReducer = (state, action) =>{
                 ...state
             }
         case COMPLETE_EXERCISE:
-            //TODO update statistics object
-            console.log(action.payload.exerciseId);
             let coNewDays = state.days;
             let coTargetedExercises = [...coNewDays[action.payload.dayIndex].exercises];
             let coRealIndex = coTargetedExercises.findIndex( (obj) => {return (action.payload.exerciseId===obj.id)});
-            // let newStats = state.statistics;
-
+            let newStats = state.stats;
+            let totalXp = state.stats.xp;
+            let coExercise = coTargetedExercises[coRealIndex];
             coTargetedExercises[coRealIndex].complete=true;
-
+            
             coNewDays[action.payload.dayIndex].exercises = coTargetedExercises;
 
-            // console.log(cotargetedExercises[action.payload.exerciseIndex]).complete;
+            //newStats is going to update all of the counting stats
+            newStats = handleCountingStats(coExercise,newStats);
+
+            //newStats is going to add xp from completed exercise
+            let earnedXp = calculateEarnedXp(coExercise);
+            totalXp += earnedXp;
+            newStats.xp = totalXp;
+
+            
+            
+            while(hasLeveledUp(newStats.level, newStats.xp)){
+                let levelUpInfo = levelUp(newStats.level, newStats.xp);
+                newStats.level = levelUpInfo.newLevel;
+                newStats.xp = levelUpInfo.leftoverXp;
+            }
+            console.log(newStats);
             return {
                 days: coNewDays,
-                ...state
+                stats: newStats,
             }
         default:
             return{...state}
