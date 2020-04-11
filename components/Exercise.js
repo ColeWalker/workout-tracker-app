@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 
@@ -10,11 +10,13 @@ const Exercise = (props) => {
     let exercise = props.exercise;
     let modalHandler = props.modalHandler;
     let completeHandler = props.completeHandler;
-    
+ 
+
+
 
     const modalHandlerCaller = () =>
     {
-        modalHandler(props.exercise);
+        modalHandler(exercise);
     }
 
     const completeHandlerCaller = () =>{
@@ -37,6 +39,7 @@ const Exercise = (props) => {
                     backgroundColor={exercise.complete? completeBgColor : defaultBgColor } 
                     color="#000000" 
                     name="ios-more" 
+                    size={25}
                     onPress={modalHandlerCaller}
                 >
                 </Ionicons.Button>
@@ -45,11 +48,13 @@ const Exercise = (props) => {
                     color="#27F106" 
                     name="md-checkmark-circle"
                     exerciseId={exercise.id}
+                    size={25}
                     onPress={completeHandlerCaller}
                 >
                 
                 </Ionicons.Button>
             </View>
+           
         </View>
     )
 }
@@ -73,6 +78,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         flexDirection:'row',
         justifyContent:"space-between",
+        alignItems:"flex-start",
     },
     exerciseWrapperComplete: {
         backgroundColor: completeBgColor,
@@ -85,7 +91,8 @@ const styles = StyleSheet.create({
         
     },
     exerciseRight:{
-
+        justifyContent:"space-between",
+        
     },
     exerciseDetailsWrapper:{
         flexDirection: 'row',

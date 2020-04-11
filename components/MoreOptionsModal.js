@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import { StyleSheet, Text, ScrollView, TextInput, Button, View, Modal } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
 
 const MoreOptionsModal = (props) => {
     let moreOptionsModalVisible = props.moreOptionsModalVisible;
@@ -8,10 +9,10 @@ const MoreOptionsModal = (props) => {
     let closeMoreOptionsModalHandler = props.closeMoreOptionsModalHandler;
     let exercise = props.exercise; 
 
-    const [editedExerciseTitle, setEditedExerciseTitle] = useState("title");
-    const [editedExerciseWeight, setEditedExerciseWeight] = useState(0);
-    const [editedExerciseRepsCount, setEditedExerciseRepsCount] = useState(0);
-    const [editedExerciseSetsCount, setEditedExerciseSetsCount] = useState(0);
+    const [editedExerciseTitle, setEditedExerciseTitle] =exercise.title ? useState(exercise.title) : useState("Default Title");
+    const [editedExerciseWeight, setEditedExerciseWeight] =exercise.weight ? useState(exercise.weight) : useState(15);
+    const [editedExerciseRepsCount, setEditedExerciseRepsCount] = exercise.reps ? useState(exercise.reps) : useState(15);
+    const [editedExerciseSetsCount, setEditedExerciseSetsCount] = exercise.sets ? useState(exercise.sets) : useState(3);
 
 
     const editExerciseHandlerCaller = () => {
@@ -27,39 +28,84 @@ const MoreOptionsModal = (props) => {
     const deleteExerciseHandlerCaller=()=>{
         deleteExerciseHandler(exercise.id);
     }
+    const resetState = ()=>{
+        exercise.title ? setEditedExerciseTitle(exercise.title) : setEditedExerciseTitle("Default Title");
+        exercise.weight ? setEditedExerciseWeight(exercise.weight) : setEditedExerciseWeight(15);
+        exercise.reps ? setEditedExerciseRepsCount(exercise.reps) : setEditedExerciseRepsCount(15);
+        exercise.sets ? setEditedExerciseSetsCount(exercise.sets) : setEditedExerciseSetsCount(3);
+    }
     return (
         <Modal
             transparent={false}
             visible={moreOptionsModalVisible}  
+            onShow={resetState}
         >   
-            <ScrollView>
-                <Text>Title</Text>
-                <TextInput 
-                style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginTop:10 }}
-                onChangeText={text => setEditedExerciseTitle(text)} value={editedExerciseTitle}></TextInput>
+            <ScrollView
+                style={styles.ModalWrapper}
+            >   
+                <View
+                    style={styles.ModalHeader}
+                >
+                    <View
+                        style={styles.CloseButtonWrapper}
+                    >
+                        <Ionicons.Button 
+                            onPress={closeMoreOptionsModalHandler} 
+                            name="ios-close"
+                            size={45}
+                            backgroundColor="#ffffff"
+                            color="#000000"
+                        ></Ionicons.Button>
+                    </View>
+                </View>
+                <Text style={styles.Label}>Title</Text>
 
-                <Text>Weight (lbs)</Text>
                 <TextInput 
-                style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 10 }}
+                style={styles.Input}
+                onChangeText={text => setEditedExerciseTitle(text)} 
+                value={editedExerciseTitle}></TextInput>
+
+                <Text style={styles.Label}>Weight (lbs)</Text>
+
+                <TextInput 
+                style={styles.Input}
                 onChangeText={text => setEditedExerciseWeight(text)} value={"" + editedExerciseWeight}></TextInput>
 
-                <Text>Reps</Text>
-                <TextInput 
-                style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 10 }}
-                onChangeText={text => setEditedExerciseRepsCount(text)} value={"" + editedExerciseRepsCount}></TextInput>
+                <Text style={styles.Label}>Reps</Text>
 
-                <Text>Sets</Text>
                 <TextInput 
-                style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 10 }}
-                onChangeText={text => setEditedExerciseSetsCount(text)} value={"" + editedExerciseSetsCount}></TextInput>
-                <Button onPress={deleteExerciseHandlerCaller} 
-                title="Delete Exercise"
-                style={styles.deleteButton}
-                />
-                <Button onPress={editExerciseHandlerCaller} 
-                title="Save Changes"
-                />
-                <Button onPress={closeMoreOptionsModalHandler} title="Close Modal"></Button>
+                style={styles.Input}
+                onChangeText={text => setEditedExerciseRepsCount(text)} 
+                value={"" + editedExerciseRepsCount}></TextInput>
+
+                <Text style={styles.Label}>Sets</Text>
+
+                <TextInput 
+                style={styles.Input}
+                onChangeText={text => setEditedExerciseSetsCount(text)} 
+                value={"" + editedExerciseSetsCount}></TextInput>
+                
+                <View
+                    style={styles.ButtonWrapper}
+                >
+                    <Button 
+                        onPress={deleteExerciseHandlerCaller} 
+                        title="Delete Exercise"
+                        style={styles.DeleteButton}
+                        color="#d11a2a"
+                    />
+                </View>
+                <View
+                    style={styles.ButtonWrapper}
+                >
+                    <Button 
+                        onPress={editExerciseHandlerCaller} 
+                        title="Save Changes"
+                        style={styles.SaveButton}
+                        color="#1fa30a"
+                    />
+                </View>
+                
             </ScrollView>
         </Modal>
 
@@ -69,4 +115,40 @@ const MoreOptionsModal = (props) => {
 
 export default MoreOptionsModal
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    ModalWrapper:{
+       paddingHorizontal: 20,
+    },
+    ModalHeader:{
+        flexDirection: "column-reverse",
+        justifyContent:'flex-end',
+        alignItems:"flex-end",
+        marginBottom: -10
+    },
+    CloseButtonWrapper:{
+        maxWidth:"50%",
+        backgroundColor: "#ffffff",
+    },
+    Label: {
+        fontSize: 20,
+        marginTop:10,
+    },
+    Input:{ 
+        padding: 12,
+        borderColor: 'gray', 
+        borderWidth: 1,
+        marginTop:10,
+        fontSize: 18, 
+    },
+    DeleteButton: {
+        backgroundColor:"#d11a2a",
+    },
+    SaveButton: {
+        marginVertical:15,
+    },
+    ButtonWrapper:{
+        marginTop:15,
+    },
+
+
+})

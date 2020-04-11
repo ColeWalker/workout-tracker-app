@@ -17,19 +17,19 @@ export default function BottomTabNavigator({ navigation, route }) {
     headerTitleStyle:{
       fontSize: 40,
       marginTop:30,
-      marginBottom:30
+      marginBottom:30 
     },
     headerStyle:{
       borderBottomWidth:0,
       shadowOpacity:0,
       elevation:0,
-      backgroundColor:"#FAF9FE",
-      
+      backgroundColor:"#FAF9FE", 
     } 
   });
 
   return (
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} 
+    headerMode="none" 
     >
       <BottomTab.Screen
         name="Daily"
@@ -70,9 +70,9 @@ function getHeaderTitle(route) {
   const friendlyDay = days[dayOfWeek];
   switch (routeName) {
     case 'Daily':
-      return friendlyDay;
+      return friendlyDay; 
     case 'Weekly':
-      return 'Weekly View';
+      return 'Week at a Glance';
     case 'Statistics':
       return 'Statistics';
     

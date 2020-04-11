@@ -35,7 +35,6 @@ const DailyScreen = (props) => {
             reps: Number(reps),
             sets: Number(sets),
             complete: false,
-            id: new Date(),
         })))
     };
     
@@ -86,16 +85,6 @@ const DailyScreen = (props) => {
         delete_exercise(exerciseId);
         setMoreOptionsModalVisible(false);
     }
-
-    // React.useLayoutEffect(()=>{
-    //     navigation.setOptions({
-    //         headerRight: ()=>(
-    //             <View style={styles.addButtonWrapper}>
-    //             <Button style={styles.addButton} onPress={()=>{setAddModalVisible(true)}} title="Add Exercise" />
-    //         </View> 
-    //         ),
-    //     }, [navigation])
-    // })
 
     return (
         <ScrollView style={styles.bodyWrapper}>
