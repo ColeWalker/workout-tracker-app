@@ -7,15 +7,14 @@ import Exercise from '../components/Exercise';
 import AddModal from '../components/AddModal';
 import MoreOptionsModal from '../components/MoreOptionsModal';
 import {useNavigation } from '@react-navigation/native'
-
+import { dayLookup } from '../redux/reducers';
 
 const DailyScreen = (props) => {
-    const navigation = useNavigation();
 
     const now = new Date();
     //int 0-6, 0=Sunday
     const dayOfWeek = now.getDay(); 
-
+    const friendlyDay = dayLookup[dayOfWeek];
     //Edit/Delete Modal 
     const [modalContext, setModalContext] = useState({});
     const [moreOptionsModalVisible, setMoreOptionsModalVisible] = useState(false);
@@ -23,9 +22,13 @@ const DailyScreen = (props) => {
     //Add Modal
     const [addModalVisible, setAddModalVisible] = useState(false);
 
-    let workoutDay = useSelector(state=> state.days[dayOfWeek].day); 
-    let exercises = useSelector(state=> state.days[dayOfWeek].exercises);  
-
+    // let workoutDay = useSelector(state=> state.days[dayOfWeek].day); 
+    let exercises = useSelector(state=> {
+        console.log(state);
+        console.log(state[friendlyDay])
+        return state[friendlyDay]}
+        );
+    console.log(exercises);
     const dispatch = useDispatch();
     const add_exercise = (title, weight, reps, sets, type, distance) => { 
        if(type=="weight"){ 
@@ -103,7 +106,7 @@ const DailyScreen = (props) => {
         }
         setMoreOptionsModalVisible(false);
     }
-    
+
     const moreOptionsModalDeleteHandler = (exerciseId)=>{
         delete_exercise(exerciseId);
         setMoreOptionsModalVisible(false);

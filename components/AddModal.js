@@ -15,7 +15,7 @@ const AddModal = (props) => {
     const [addedExerciseDistance, setAddedExerciseDistance] = useState(0);
     const addExerciseHandlerCaller = () => {
         addExerciseHandler(addedExerciseTitle, addedExerciseWeight, addedExerciseRepsCount, 
-            addedExerciseRepsCount, addedExerciseType, addedExerciseDistance);
+            addedExerciseSetsCount, addedExerciseType, addedExerciseDistance);
         resetVariables();
     }
 
@@ -90,7 +90,7 @@ const AddModal = (props) => {
                     <Text style={styles.Label}>Sets</Text>
                     <TextInput 
                         style={styles.Input}
-                        onChangeText={text => setAddedExerciseSetsCount(text)} 
+                        onChangeText={(text) => setAddedExerciseSetsCount(text)} 
                         value={"" + addedExerciseSetsCount}
                     />
                 </View>

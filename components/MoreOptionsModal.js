@@ -45,6 +45,7 @@ const MoreOptionsModal = (props) => {
         exercise.distance ? setEditedExerciseDistance(exercise.distance) : setEditedExerciseDistance(0);
         exercise.type ? setEditedExerciseType(exercise.type) : setEditedExerciseType("weight");
     }
+
     return (
         <Modal
             transparent={false}
@@ -91,19 +92,20 @@ const MoreOptionsModal = (props) => {
                     onChangeText={text => setEditedExerciseTitle(text)} 
                     value={editedExerciseTitle}
                 />
-
+                
                { editedExerciseType=="weight" ? <View>
                     <Text style={styles.Label}>Weight (lbs)</Text>
     
                     <TextInput 
                         style={styles.Input}
-                        onChangeText={text => setEditedExerciseWeight(text)} value={"" + editedExerciseWeight}
+                        onChangeText={text => setEditedExerciseWeight(text)} 
+                        value={"" + editedExerciseWeight}
                     />
     
                     <Text style={styles.Label}>Reps</Text>
     
                     <TextInput 
-                    style={styles.Input}
+                        style={styles.Input}
                         onChangeText={text => setEditedExerciseRepsCount(text)} 
                         value={"" + editedExerciseRepsCount}
                     />
@@ -112,7 +114,7 @@ const MoreOptionsModal = (props) => {
     
                     <TextInput 
                         style={styles.Input}
-                        onChangeText={text => setEditedExerciseSetsCount(text)} 
+                        onChangeText={() => setEditedExerciseSetsCount(text)} 
                         value={"" + editedExerciseSetsCount}
                     />
                     
@@ -145,11 +147,8 @@ const MoreOptionsModal = (props) => {
                         color="#1fa30a"
                     />
                 </View>
-                
             </ScrollView>
         </Modal>
-
-       
     )
 }
 

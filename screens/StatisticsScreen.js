@@ -12,7 +12,7 @@ const StatisticsScreen = () => {
 
     let neededXp = calculateLevelUpXp(level);
     let xpPercent = currentXp/neededXp * 100;
-    console.log(stats)
+
     return (
         <ScrollView
             style={styles.BodyWrapper}
@@ -40,7 +40,7 @@ const StatisticsScreen = () => {
                         size={75}
                     />
                     <Text style={styles.StatsTitle}>Reps Completed</Text>
-                    <Text style={styles.Stat}>{stats.repsCompleted} lbs</Text>
+                    <Text style={styles.Stat}>{stats.repsCompleted} reps</Text>
                 </View>
                 <View
                     style={styles.StatsBlock}
@@ -50,7 +50,7 @@ const StatisticsScreen = () => {
                         size={75}
                     />
                     <Text style={styles.StatsTitle}>Weight Lifted</Text>
-                    <Text style={styles.Stat}>{stats.weightLifted} reps</Text>
+                    <Text style={styles.Stat}>{stats.weightLifted} lbs</Text>
                 </View>
             </View>
             <View
