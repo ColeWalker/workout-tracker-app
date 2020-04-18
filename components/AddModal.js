@@ -1,18 +1,21 @@
 import React, {useState} from 'react'
-import { StyleSheet, Text, ScrollView, TextInput, Button, View, Modal } from 'react-native'
+import { Picker,StyleSheet, Text, ScrollView, TextInput, Button, View, Modal } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
+
 
 const AddModal = (props) => {
     let addModalVisible = props.addModalVisible;
     let addExerciseHandler = props.addExerciseHandler;
     let closeAddModalHandler = props.closeAddModalHandler;
     const [addedExerciseTitle, setAddedExerciseTitle] = useState("Default Title");
+    const [addedExerciseType, setAddedExerciseType ] = useState("weight");
     const [addedExerciseWeight, setAddedExerciseWeight] = useState(15);
     const [addedExerciseRepsCount, setAddedExerciseRepsCount] = useState(15);
     const [addedExerciseSetsCount, setAddedExerciseSetsCount] = useState(3);
-
+    const [addedExerciseDistance, setAddedExerciseDistance] = useState(0);
     const addExerciseHandlerCaller = () => {
-        addExerciseHandler(addedExerciseTitle, addedExerciseWeight, addedExerciseRepsCount, addedExerciseRepsCount);
+        addExerciseHandler(addedExerciseTitle, addedExerciseWeight, addedExerciseRepsCount, 
+            addedExerciseSetsCount, addedExerciseType, addedExerciseDistance);
         resetVariables();
     }
 
@@ -21,6 +24,7 @@ const AddModal = (props) => {
         setAddedExerciseWeight(15);
         setAddedExerciseRepsCount(15);
         setAddedExerciseSetsCount(3);
+        setAddedExerciseDistance(0);
     }
 
     return (
@@ -31,7 +35,6 @@ const AddModal = (props) => {
             <ScrollView
                 style={styles.ModalWrapper}
             >
-
                 <View
                     style={styles.ModalHeader}
                 >
@@ -44,28 +47,63 @@ const AddModal = (props) => {
                             size={45}
                             backgroundColor="#ffffff"
                             color="#000000"
-                        ></Ionicons.Button>
+                        />
                     </View>
                 </View>
+                <Picker
+                    selectedValue={addedExerciseType}
+                    onValueChange={(itemValue) => setAddedExerciseType(itemValue)}
+                    style={styles.Input}
+                >
+                    <Picker.Item 
+                        label="Weight"
+                        value="weight"
+                    />
+                    <Picker.Item 
+                        label="Distance"
+                        value="distance"
+                    />
+                </Picker>
+
                 <Text style={styles.Label}>Title</Text>
                 <TextInput 
-                style={styles.Input}
-                onChangeText={text => setAddedExerciseTitle(text)} value={addedExerciseTitle}></TextInput>
+                    style={styles.Input}
+                    onChangeText={text => setAddedExerciseTitle(text)} 
+                    value={addedExerciseTitle}
+                />
 
-                <Text style={styles.Label}>Weight (lbs)</Text>
-                <TextInput 
-                style={styles.Input}
-                onChangeText={text => setAddedExerciseWeight(text)} value={"" + addedExerciseWeight}></TextInput>
-
-                <Text style={styles.Label}>Reps</Text>
-                <TextInput 
-                style={styles.Input}
-                onChangeText={text => setAddedExerciseRepsCount(text)} value={"" + addedExerciseRepsCount}></TextInput>
-
-                <Text style={styles.Label}>Sets</Text>
-                <TextInput 
-                style={styles.Input}
-                onChangeText={text => setAddedExerciseSetsCount(text)} value={"" + addedExerciseSetsCount}></TextInput>
+                { addedExerciseType=="weight" ? <View>
+                    <Text style={styles.Label}>Weight (lbs)</Text>
+                    <TextInput 
+                        style={styles.Input}
+                        onChangeText={text => setAddedExerciseWeight(text)} 
+                        value={"" + addedExerciseWeight}
+                    />
+    
+                    <Text style={styles.Label}>Reps</Text>
+                    <TextInput 
+                        style={styles.Input}
+                        onChangeText={text => setAddedExerciseRepsCount(text)} 
+                        value={"" + addedExerciseRepsCount}
+                    />
+    
+                    <Text style={styles.Label}>Sets</Text>
+                    <TextInput 
+                        style={styles.Input}
+                        onChangeText={(text) => setAddedExerciseSetsCount(text)} 
+                        value={"" + addedExerciseSetsCount}
+                    />
+                </View>
+                    :
+                <View
+                >
+                    <Text style={styles.Label}>Distance (mi)</Text>
+                    <TextInput 
+                        style={styles.Input}
+                        onChangeText={text => setAddedExerciseDistance(text)} 
+                        value={"" + addedExerciseDistance}
+                    />
+                </View>}
 
                 <View
                     style={styles.ButtonWrapper}
@@ -120,5 +158,6 @@ const styles = StyleSheet.create({
     },
     ButtonWrapper:{
         marginTop:15,
+        marginBottom:50,
     },
 })

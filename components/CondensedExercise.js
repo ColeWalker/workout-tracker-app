@@ -30,16 +30,28 @@ const CondensedExercise = (props) => {
         return (dispatch(editExercise(dayNum, exerciseId, newExercise)));
     }
     const moreOptionsModalEditHandler = (context, newDetails) =>{
-        edit_exercise(context.id, {
-            title: newDetails.exerciseTitle,
-            weight: newDetails.exerciseWeight,
-            type: newDetails.type,
-            reps: Number(newDetails.exerciseRepsCount),
-            sets: Number(newDetails.exerciseSetsCount),
-            complete: context.complete,
-            id: context.id,
-            }
-        );
+        if(newDetails.type=="weight"){
+            edit_exercise(context.id, {
+                title: newDetails.exerciseTitle,
+                weight: newDetails.exerciseWeight,
+                type: newDetails.type,
+                reps: Number(newDetails.exerciseRepsCount),
+                sets: Number(newDetails.exerciseSetsCount),
+                complete: context.complete,
+                id: context.id,
+                }
+            );
+        }
+        else{
+            edit_exercise(context.id, {
+                title: newDetails.exerciseTitle,
+                type: newDetails.type,
+                complete: context.complete,
+                id: context.id,
+                distance: newDetails.distance
+                }
+            );
+        }
         setMoreOptionsModalVisible(false);
     }
 

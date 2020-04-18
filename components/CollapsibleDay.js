@@ -2,20 +2,21 @@ import React, {useState} from 'react';
 import { StyleSheet, Text, View, Button, TouchableHighlight } from 'react-native';
 import { Ionicons} from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
-import { addExercise } from '../redux/actions'
+import { addExercise } from '../redux/actions';
 import CondensedExercise from './CondensedExercise';
-import AddModal from './AddModal'
+import AddModal from './AddModal';
+import {dayLookup} from '../redux/reducers';
 
 const CollapsibleDay = (props) => {
     const friendlyDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const dayNum = props.day;
     const dayName = friendlyDays[dayNum];
-
+    const lookupName = dayLookup[dayNum];
     const dispatch = useDispatch();
     const [isExpanded, setIsExpanded] = useState(false);
     const [addModalVisible, setAddModalVisible] = useState(false);
     //array[object]
-    const exercises = useSelector( state => state.days[dayNum].exercises);
+    const exercises = useSelector( state => state[lookupName]);
 
     const closeAddModalHandler = () =>{
         setAddModalVisible(false);
@@ -25,21 +26,32 @@ const CollapsibleDay = (props) => {
         setAddModalVisible(true);     
     }
 
-    const add_exercise = (title, weight, reps, sets) => { 
-        return(dispatch(addExercise(dayNum, {
-            title: "" + title,
-            weight: Number(weight),
-            type: "weight",
-            reps: Number(reps),
-            sets: Number(sets),
-            complete: false,
-        })))
-    };
+    const add_exercise = (title, weight, reps, sets, type, distance) => { 
+        if(type=="weight"){ 
+            return(dispatch(addExercise(dayNum, {
+             title: "" + title,
+             weight: Number(weight),
+             type: "weight",
+             reps: Number(reps),
+             sets: Number(sets),
+             complete: false,
+         })))
+         }
+         else{
+             return(dispatch(addExercise(dayNum, {
+                 title: "" + title,
+                 type: "distance",
+                 distance: (Number(distance)),
+                 complete:false,
+             })))
+         }
+     };
 
-    const addModalAddExerciseHandler = (addedExerciseTitle, addedExerciseWeight, addedExerciseRepsCount, addedExerciseSetsCount) =>{
-        add_exercise(addedExerciseTitle, addedExerciseWeight, addedExerciseRepsCount, addedExerciseSetsCount); 
+     const addModalAddExerciseHandler = (addedExerciseTitle, addedExerciseWeight, addedExerciseRepsCount, addedExerciseSetsCount, addedExerciseType, addedExerciseDistance) =>{
+        add_exercise(addedExerciseTitle, addedExerciseWeight, addedExerciseRepsCount,
+             addedExerciseSetsCount, addedExerciseType, addedExerciseDistance); 
         setAddModalVisible(false);
-    } 
+    }
 
     const expandDayHandler = () =>{
         setIsExpanded(true);
@@ -145,7 +157,6 @@ const styles = StyleSheet.create({
     },
     ListWrapper:{
         display:"none",
-       
     },
     ListWrapperVisible:{
         display:"flex",

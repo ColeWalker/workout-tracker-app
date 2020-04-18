@@ -1,76 +1,114 @@
 import { ADD_EXERCISE, DELETE_EXERCISE, EDIT_EXERCISE, COMPLETE_EXERCISE } from './actions';
+import { handleCountingStats,calculateEarnedXp, hasLeveledUp, levelUp } from '../functions/stats'
 
 
-export default rootReducer = (state, action) =>{
+export const dayLookup = ['sundayExercises',
+    'mondayExercises',
+    'tuesdayExercises',
+    "wednesdayExercises",
+    "thursdayExercises",
+    "fridayExercises",
+    "saturdayExercises"]
+
+const initialState = {
+    sundayExercises:[],
+    mondayExercises:[],
+    tuesdayExercises:[],
+    wednesdayExercises:[],
+    thursdayExercises:[],
+    fridayExercises:[],
+    saturdayExercises:[],
+    stats: {
+        level: 1,
+        xp: 0,
+        weightLifted: 0,
+        distance: 0,
+        repsCompleted: 0,
+        setsCompleted: 0,
+        exercisesCompleted: 0,
+    }
+};
+
+export default rootReducer = (state = {...initialState}, action) =>{
     switch(action.type){
         case ADD_EXERCISE:
             // type, payload{dayIndex, exercise}
-            let aeNewDays = state.days;
+            let aeStringDay = dayLookup[action.payload.dayIndex];
+            let aeCurrDay = [...state[aeStringDay]];
             let aeModifiedExercise = {...action.payload.exercise};
-            let modifiedExerciseNewId = aeNewDays[action.payload.dayIndex].exercises.length ? aeNewDays[action.payload.dayIndex].exercises[aeNewDays[action.payload.dayIndex].exercises.length-1].id+1 : 1;
+            let modifiedExerciseNewId = aeCurrDay.length ? aeCurrDay[aeCurrDay.length-1].id+1 : 1;
             aeModifiedExercise.id = modifiedExerciseNewId;
-         
-            aeNewDays[action.payload.dayIndex].exercises = [...aeNewDays[action.payload.dayIndex].exercises, aeModifiedExercise];
+
+            aeCurrDay = [...aeCurrDay, aeModifiedExercise];
+            let aeReturnState ={...state};
+            aeReturnState[aeStringDay] = aeCurrDay;
             
-            return {
-                days:aeNewDays,
-                ...state
-            }
+            return aeReturnState;
         case DELETE_EXERCISE:
             // type, payload{dayIndex, exerciseId}
-        
+            let deStringDay = dayLookup[action.payload.dayIndex];
+            let deReturnState ={...state};
             //setting local copy of state.days for easy use
-            let deNewDays = [...state.days];
+
             //local copy of exercises of specified day
-            let deTargetedExercises = [...deNewDays[action.payload.dayIndex].exercises];
+            let deTargetedExercises = [...state[deStringDay]];
             //return index num where we'll delete it at
-            let deRealIndex = deTargetedExercises.findIndex( (obj) => {return (action.payload.exerciseId===obj.id)});
-            if(deRealIndex==0){
+            let deExerciseIndex = deTargetedExercises.findIndex( (obj) => {return (action.payload.exerciseId===obj.id)});
+            if(deExerciseIndex==0){
                 //if it's the first item, cut it off and return the rest of the array
                 deTargetedExercises = [...deTargetedExercises.slice(1)];
-                deNewDays[action.payload.dayIndex].exercises = deTargetedExercises;
+                deReturnState[deStringDay]= deTargetedExercises;
             }
-            else if(deRealIndex!=-1){
+            else if(deExerciseIndex!=-1){
                 //return concatenated array from 0 -> index we want to remove + array from after removed index to end
-                deTargetedExercises = [...deTargetedExercises.slice(0, deRealIndex), ...deTargetedExercises.slice(deRealIndex + 1)];
-                deNewDays[action.payload.dayIndex].exercises = deTargetedExercises;
+                deTargetedExercises = [...deTargetedExercises.slice(0, deExerciseIndex), ...deTargetedExercises.slice(deExerciseIndex + 1)];
+                deReturnState[deStringDay] = deTargetedExercises;
             }
             //set the exercises to the new version
-            return {
-                days:deNewDays,
-                ...state
-            }
+            return deReturnState;
+            
         case EDIT_EXERCISE: 
             //targetedExercises [payload.exerciseIndex] = payload.newExercise
-            let edNewDays = state.days;
-            let edTargetedExercises = [...edNewDays[action.payload.dayIndex].exercises];
-            let edRealIndex = edTargetedExercises.findIndex( (obj) => {return (action.payload.exerciseId===obj.id)});
+            let edStringDay = dayLookup[action.payload.dayIndex];
+            let edReturnState ={...state};
 
-            edTargetedExercises[edRealIndex]= action.payload.newExercise;
-            edNewDays[action.payload.dayIndex].exercises = edTargetedExercises;
+            let edTargetedExercises = [...state[edStringDay]];
+            let edExerciseIndex = edTargetedExercises.findIndex( (obj) => {return (action.payload.exerciseId===obj.id)});
+
+            edTargetedExercises[edExerciseIndex]= action.payload.newExercise;
+            edReturnState[edStringDay] = edTargetedExercises;
             
-            // console.log(edNewDays);
-            return {
-                days: edNewDays,
-                ...state
-            }
+            return edReturnState;
         case COMPLETE_EXERCISE:
-            //TODO update statistics object
-            console.log(action.payload.exerciseId);
-            let coNewDays = state.days;
-            let coTargetedExercises = [...coNewDays[action.payload.dayIndex].exercises];
-            let coRealIndex = coTargetedExercises.findIndex( (obj) => {return (action.payload.exerciseId===obj.id)});
-            // let newStats = state.statistics;
+            let coStringDay = dayLookup[action.payload.dayIndex];
+            let coReturnState = {...state};
+            let coTargetedExercises = [...state[coStringDay]];
+            let coExerciseIndex = coTargetedExercises.findIndex( (obj) => {return (action.payload.exerciseId===obj.id)});
+            let newStats = state.stats;
+            let totalXp = state.stats.xp;
+            let coExercise = coTargetedExercises[coExerciseIndex];
+            coTargetedExercises[coExerciseIndex].complete=true;
+            
+            coReturnState[coStringDay] = coTargetedExercises;
 
-            coTargetedExercises[coRealIndex].complete=true;
+            //newStats is going to update all of the counting stats
+            newStats = handleCountingStats(coExercise,newStats);
 
-            coNewDays[action.payload.dayIndex].exercises = coTargetedExercises;
+            //newStats is going to add xp from completed exercise
+            let earnedXp = calculateEarnedXp(coExercise);
+            totalXp += earnedXp;
+            newStats.xp = totalXp;
 
-            // console.log(cotargetedExercises[action.payload.exerciseIndex]).complete;
-            return {
-                days: coNewDays,
-                ...state
+            
+            
+            while(hasLeveledUp(newStats.level, newStats.xp)){
+                let levelUpInfo = levelUp(newStats.level, newStats.xp);
+                newStats.level = levelUpInfo.newLevel;
+                newStats.xp = levelUpInfo.leftoverXp;
             }
+
+            coReturnState["stats"]=newStats;
+            return coReturnState;
         default:
             return{...state}
     }
