@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addExercise } from '../redux/actions';
 import CondensedExercise from './CondensedExercise';
 import AddModal from './AddModal';
-import {dayLookup} from '../redux/reducers';
+import {dayLookup} from '../functions/utilities';
 
 const CollapsibleDay = (props) => {
     const friendlyDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];

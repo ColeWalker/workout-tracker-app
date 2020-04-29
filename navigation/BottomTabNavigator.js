@@ -4,9 +4,12 @@ import TabBarIcon from '../components/TabBarIcon';
 import DailyScreen from '../screens/DailyScreen.js';
 import WeeklyScreen from '../screens/WeeklyScreen.js';
 import StatisticsScreen from '../screens/StatisticsScreen.js';
+import RoutinesScreen from '../screens/RoutinesScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import RoutinesNavigator from './RoutinesNavigator';
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Home';
+const INITIAL_ROUTE_NAME = 'Daily';
 
 export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -17,7 +20,8 @@ export default function BottomTabNavigator({ navigation, route }) {
     headerTitleStyle:{
       fontSize: 40,
       marginTop:30,
-      marginBottom:30 
+      marginBottom:30,
+       backgroundColor:"#FAF9FE", 
     },
     headerStyle:{
       borderBottomWidth:0,
@@ -28,7 +32,8 @@ export default function BottomTabNavigator({ navigation, route }) {
   });
 
   return (
-    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} 
+    <BottomTab.Navigator 
+    initialRouteName={INITIAL_ROUTE_NAME} 
     headerMode="none" 
     >
       <BottomTab.Screen
@@ -56,6 +61,14 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-podium" />,
         }}
       />
+      <BottomTab.Screen
+        name="Routines"
+        component={RoutinesNavigator}
+        options={{
+          title: 'Routines',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-podium" />,
+        }}
+      />
       
     </BottomTab.Navigator>
   );
@@ -75,6 +88,10 @@ function getHeaderTitle(route) {
       return 'Week at a Glance';
     case 'Statistics':
       return 'Statistics';
+    case 'Routines':
+      return 'Routines';
+    case 'Settings':
+      return 'Settings';
     
   }
 }

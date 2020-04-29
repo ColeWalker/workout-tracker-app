@@ -43,6 +43,9 @@ export const handleCountingStats = (exercise, currentStats)=>{
         newStats.repsCompleted += exercise.reps;
         newStats.setsCompleted+= exercise.sets;
     }
+    else{
+        newStats.distance += exercise.distance;
+    }
     newStats.exercisesCompleted++;
 
     return newStats;

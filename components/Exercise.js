@@ -10,47 +10,49 @@ const Exercise = (props) => {
     let exercise = props.exercise;
     let modalHandler = props.modalHandler;
     let completeHandler = props.completeHandler;
- 
+    let type = props.type;
 
-
-
-    const modalHandlerCaller = () =>
-    {
+    const modalHandlerCaller = () =>{
         modalHandler(exercise);
     }
 
     const completeHandlerCaller = () =>{
-        completeHandler(exercise.id);
+        !exercise.complete && completeHandler(exercise.id);
     }
 
     return (
         <View style={exercise.complete ? [styles.exerciseWrapper,styles.exerciseWrapperComplete] : [styles.exerciseWrapper]}>
             <View style={styles.exerciseDetailsOuterWrapper}>
-                <Text style={styles.exerciseTitle}>{exercise.title}</Text>
-                <View style={styles.exerciseDetailsWrapper}>
-                    <Text style={styles.weight}>{exercise.weight}lbs</Text>
-                    <Text style={styles.repsAndSets}>{exercise.sets} sets of {exercise.reps} reps</Text>
-                </View>
-            </View>
-            <View style={styles.exerciseRight}>
-                <Ionicons.Button 
+                
+                <View style={styles.exerciseInfoRow}>
+                    <Text style={styles.exerciseTitle}>{exercise.title}</Text>
+                    <Ionicons.Button 
                     backgroundColor={exercise.complete? completeBgColor : defaultBgColor } 
                     color="#000000" 
                     name="ios-more" 
                     size={25}
                     onPress={modalHandlerCaller}
-                >
-                </Ionicons.Button>
-                <Ionicons.Button 
-                    backgroundColor={exercise.complete? completeBgColor : defaultBgColor} 
-                    color="#27F106" 
-                    name="md-checkmark-circle"
-                    exerciseId={exercise.id}
-                    size={25}
-                    onPress={completeHandlerCaller}
-                >
-                
-                </Ionicons.Button>
+                    />
+                </View>
+                <View style={styles.exerciseInfoRow}>
+                    <View style={styles.exerciseDetailsWrapper}>
+                        { exercise.type=="weight"? <>
+                            <Text style={styles.weight}>{exercise.weight}lbs</Text>
+                            <Text style={styles.repsAndSets}>{exercise.sets} sets of {exercise.reps} reps</Text>
+                            </>: <>
+                                <Text style={styles.weight}>{exercise.distance}mi</Text>
+                        </>}
+                       
+                    </View>
+                    {type!="routine" && <Ionicons.Button 
+                        backgroundColor={exercise.complete? completeBgColor : defaultBgColor} 
+                        color={exercise.complete ? "#d1d1d1": "#27F106" }
+                        name="md-checkmark-circle"
+                        exerciseId={exercise.id}
+                        size={25}
+                        onPress={completeHandlerCaller}
+                    />}
+                </View>
             </View>
            
         </View>
@@ -65,6 +67,12 @@ const styles = StyleSheet.create({
         backgroundColor: "#FAF9FE",
         flex:1,
 
+    },
+    exerciseInfoRow:{
+        flexDirection: "row",
+        justifyContent:"space-between",
+        alignItems:"center"
+        
     },
     exerciseWrapper: {
         backgroundColor: defaultBgColor,
@@ -86,7 +94,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },  
     exerciseDetailsOuterWrapper:{
-        
+        flex:1,
     },
     exerciseRight:{
         justifyContent:"space-between",

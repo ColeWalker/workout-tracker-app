@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { Picker,StyleSheet, Text, ScrollView, TextInput, Button, View, Modal } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
-
+import { global } from '../styles/global'
 
 const AddModal = (props) => {
     let addModalVisible = props.addModalVisible;
@@ -33,7 +33,7 @@ const AddModal = (props) => {
             visible={addModalVisible}  
         >   
             <ScrollView
-                style={styles.ModalWrapper}
+                style={global.modalWrapper}
             >
                 <View
                     style={styles.ModalHeader}
@@ -53,7 +53,7 @@ const AddModal = (props) => {
                 <Picker
                     selectedValue={addedExerciseType}
                     onValueChange={(itemValue) => setAddedExerciseType(itemValue)}
-                    style={styles.Input}
+                    style={global.input}
                 >
                     <Picker.Item 
                         label="Weight"
@@ -65,31 +65,31 @@ const AddModal = (props) => {
                     />
                 </Picker>
 
-                <Text style={styles.Label}>Title</Text>
+                <Text style={global.label}>Title</Text>
                 <TextInput 
-                    style={styles.Input}
+                    style={global.input}
                     onChangeText={text => setAddedExerciseTitle(text)} 
                     value={addedExerciseTitle}
                 />
 
                 { addedExerciseType=="weight" ? <View>
-                    <Text style={styles.Label}>Weight (lbs)</Text>
+                    <Text style={global.label}>Weight (lbs)</Text>
                     <TextInput 
-                        style={styles.Input}
+                        style={global.input}
                         onChangeText={text => setAddedExerciseWeight(text)} 
                         value={"" + addedExerciseWeight}
                     />
     
-                    <Text style={styles.Label}>Reps</Text>
+                    <Text style={global.label}>Reps</Text>
                     <TextInput 
-                        style={styles.Input}
+                        style={global.input}
                         onChangeText={text => setAddedExerciseRepsCount(text)} 
                         value={"" + addedExerciseRepsCount}
                     />
     
-                    <Text style={styles.Label}>Sets</Text>
+                    <Text style={global.label}>Sets</Text>
                     <TextInput 
-                        style={styles.Input}
+                        style={global.input}
                         onChangeText={(text) => setAddedExerciseSetsCount(text)} 
                         value={"" + addedExerciseSetsCount}
                     />
@@ -97,22 +97,22 @@ const AddModal = (props) => {
                     :
                 <View
                 >
-                    <Text style={styles.Label}>Distance (mi)</Text>
+                    <Text style={global.label}>Distance (mi)</Text>
                     <TextInput 
-                        style={styles.Input}
+                        style={global.input}
                         onChangeText={text => setAddedExerciseDistance(text)} 
                         value={"" + addedExerciseDistance}
                     />
                 </View>}
 
                 <View
-                    style={styles.ButtonWrapper}
+                    style={global.buttonWrapper}
                 >
                     <Button 
                         title="Save Exercise" 
                         onPress={addExerciseHandlerCaller}
                         color="#1fa30a"
-                        style={styles.SaveButton}
+                        style={global.saveButton}
                     />
                 </View>
             </ScrollView>

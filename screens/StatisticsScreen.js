@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import {calculateLevelUpXp} from '../functions/stats'
 import {MaterialCommunityIcons, AntDesign} from '@expo/vector-icons'
+import { global } from '../styles/global';
 
 const StatisticsScreen = () => {
     const dispatch = useDispatch();
@@ -15,7 +16,7 @@ const StatisticsScreen = () => {
 
     return (
         <ScrollView
-            style={styles.BodyWrapper}
+            style={global.bodyWrapper}
         >
             <View
                 style={styles.GamificationInfoWrapper}
