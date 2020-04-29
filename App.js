@@ -13,6 +13,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 
 
 import {PersistGate} from 'redux-persist/integration/react';
+import RoutineDetailsScreen from './screens/RoutineDetailsScreen';
 const Stack = createStackNavigator();
 
 export default function App(props) {

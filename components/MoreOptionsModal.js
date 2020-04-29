@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import { Picker,StyleSheet, Text, ScrollView, TextInput, Button, View, Modal } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import { global } from '../styles/global'
 
 const MoreOptionsModal = (props) => {
     let moreOptionsModalVisible = props.moreOptionsModalVisible;
@@ -9,8 +10,8 @@ const MoreOptionsModal = (props) => {
     let closeMoreOptionsModalHandler = props.closeMoreOptionsModalHandler;
     let exercise = props.exercise; 
 
-    const [editedExerciseTitle, setEditedExerciseTitle] =exercise.title ? useState(exercise.title) : useState("Default Title");
-    const [editedExerciseWeight, setEditedExerciseWeight] =exercise.weight ? useState(exercise.weight) : useState(15);
+    const [editedExerciseTitle, setEditedExerciseTitle] = exercise.title ? useState(exercise.title) : useState("Default Title");
+    const [editedExerciseWeight, setEditedExerciseWeight] = exercise.weight ? useState(exercise.weight) : useState(15);
     const [editedExerciseRepsCount, setEditedExerciseRepsCount] = exercise.reps ? useState(exercise.reps) : useState(15);
     const [editedExerciseSetsCount, setEditedExerciseSetsCount] = exercise.sets ? useState(exercise.sets) : useState(3);
     const [editedExerciseDistance, setEditedExerciseDistance] = exercise.distance ? useState(exercise.distance) : useState(0);
@@ -28,6 +29,7 @@ const MoreOptionsModal = (props) => {
         }
         else{
             editExerciseHandler(exercise, {
+                exerciseTitle: editedExerciseTitle,
                 type: "distance",
                 distance: editedExerciseDistance
             });
@@ -53,7 +55,7 @@ const MoreOptionsModal = (props) => {
             onShow={resetState}
         >   
             <ScrollView
-                style={styles.ModalWrapper}
+                style={global.modalWrapper}
             >   
                 <View
                     style={styles.ModalHeader}
@@ -73,7 +75,7 @@ const MoreOptionsModal = (props) => {
                 <Picker
                     selectedValue={editedExerciseType}
                     onValueChange={(itemValue) => setEditedExerciseType(itemValue)}
-                    style={styles.Input}
+                    style={global.input}
                 >
                     <Picker.Item 
                         label="Weight"
@@ -85,65 +87,65 @@ const MoreOptionsModal = (props) => {
                     />
                 </Picker>
 
-                <Text style={styles.Label}>Title</Text>
+                <Text style={global.label}>Title</Text>
 
                 <TextInput 
-                    style={styles.Input}
+                    style={global.input}
                     onChangeText={text => setEditedExerciseTitle(text)} 
                     value={editedExerciseTitle}
                 />
                 
                { editedExerciseType=="weight" ? <View>
-                    <Text style={styles.Label}>Weight (lbs)</Text>
+                    <Text style={global.label}>Weight (lbs)</Text>
     
                     <TextInput 
-                        style={styles.Input}
+                        style={global.input}
                         onChangeText={text => setEditedExerciseWeight(text)} 
                         value={"" + editedExerciseWeight}
                     />
     
-                    <Text style={styles.Label}>Reps</Text>
+                    <Text style={global.label}>Reps</Text>
     
                     <TextInput 
-                        style={styles.Input}
+                        style={global.input}
                         onChangeText={text => setEditedExerciseRepsCount(text)} 
                         value={"" + editedExerciseRepsCount}
                     />
     
-                    <Text style={styles.Label}>Sets</Text>
+                    <Text style={global.label}>Sets</Text>
     
                     <TextInput 
-                        style={styles.Input}
-                        onChangeText={() => setEditedExerciseSetsCount(text)} 
+                        style={global.input}
+                        onChangeText={(text) => setEditedExerciseSetsCount(text)} 
                         value={"" + editedExerciseSetsCount}
                     />
                     
                 </View> : <View>
-                    <Text style={styles.Label}>Distance (mi)</Text>
+                    <Text style={global.label}>Distance (mi)</Text>
                     <TextInput 
-                        style={styles.Input}
+                        style={global.input}
                         onChangeText={text => setEditedExerciseDistance(text)} 
                         value={"" + editedExerciseDistance}
                     />
                 </View>
                 }
                 <View
-                    style={styles.ButtonWrapper}
+                    style={global.buttonWrapper}
                 >
                     <Button 
                         onPress={deleteExerciseHandlerCaller} 
                         title="Delete Exercise"
-                        style={styles.DeleteButton}
+                        style={global.deleteButton}
                         color="#d11a2a"
                     />
                 </View>
                 <View
-                    style={styles.ButtonWrapper}
+                    style={global.buttonWrapper}
                 >
                     <Button 
                         onPress={editExerciseHandlerCaller} 
                         title="Save Changes"
-                        style={styles.SaveButton}
+                        style={global.saveButton}
                         color="#1fa30a"
                     />
                 </View>
@@ -167,17 +169,6 @@ const styles = StyleSheet.create({
     CloseButtonWrapper:{
         maxWidth:"50%",
         backgroundColor: "#ffffff",
-    },
-    Label: {
-        fontSize: 20,
-        marginTop:10,
-    },
-    Input:{ 
-        padding: 12,
-        borderColor: 'gray', 
-        borderWidth: 1,
-        marginTop:10,
-        fontSize: 18, 
     },
     DeleteButton: {
         backgroundColor:"#d11a2a",

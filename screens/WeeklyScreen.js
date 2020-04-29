@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import { Text, View, ScrollView, StyleSheet } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import CollapsibleDay from '../components/CollapsibleDay'
+import { global } from '../styles/global';
 
 export default class WeeklyScreen extends Component {
     render() {
         return (
-            <ScrollView style={styles.bodyWrapper}>
+            <ScrollView style={global.bodyWrapper}>
                 <CollapsibleDay
                     day={0}
                 />
@@ -34,9 +35,4 @@ export default class WeeklyScreen extends Component {
 }
 
 const styles= StyleSheet.create({
-    bodyWrapper:{
-        backgroundColor: "#FAF9FE",
-        flex:1,
-        paddingHorizontal: 40,
-    },
 })

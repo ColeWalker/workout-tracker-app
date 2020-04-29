@@ -7,7 +7,8 @@ import Exercise from '../components/Exercise';
 import AddModal from '../components/AddModal';
 import MoreOptionsModal from '../components/MoreOptionsModal';
 import {useNavigation } from '@react-navigation/native'
-import { dayLookup } from '../redux/reducers';
+import { dayLookup } from '../functions/utilities';
+import { global } from '../styles/global';
 
 const DailyScreen = (props) => {
 
@@ -24,11 +25,9 @@ const DailyScreen = (props) => {
 
     // let workoutDay = useSelector(state=> state.days[dayOfWeek].day); 
     let exercises = useSelector(state=> {
-        console.log(state);
-        console.log(state[friendlyDay])
         return state[friendlyDay]}
-        );
-    console.log(exercises);
+    );
+    
     const dispatch = useDispatch();
     const add_exercise = (title, weight, reps, sets, type, distance) => { 
        if(type=="weight"){ 
@@ -113,7 +112,7 @@ const DailyScreen = (props) => {
     }
 
     return (
-        <ScrollView style={styles.bodyWrapper}>
+        <ScrollView style={global.bodyWrapper}>
             <View style={styles.addButtonWrapper}>
                 <Button style={styles.addButton} onPress={()=>{setAddModalVisible(true)}} title="+ Add Exercise" />
             </View> 
@@ -132,8 +131,6 @@ const DailyScreen = (props) => {
             
             })}
 
-         
-            
             <MoreOptionsModal
                 moreOptionsModalVisible={moreOptionsModalVisible}
                 editExerciseHandler={moreOptionsModalEditHandler}
