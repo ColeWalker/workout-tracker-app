@@ -23,7 +23,6 @@ const Exercise = (props) => {
     return (
         <View style={exercise.complete ? [styles.exerciseWrapper,styles.exerciseWrapperComplete] : [styles.exerciseWrapper]}>
             <View style={styles.exerciseDetailsOuterWrapper}>
-                
                 <View style={styles.exerciseInfoRow}>
                     <Text style={styles.exerciseTitle}>{exercise.title}</Text>
                     <Ionicons.Button 

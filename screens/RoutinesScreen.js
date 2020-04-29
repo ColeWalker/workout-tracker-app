@@ -57,10 +57,17 @@ const RoutinesScreen = ({navigation, ...props}) => {
                     style={global.input}
                 /> 
                 <View style={global.buttonWrapper}>
-                    <Button onPress={hideAddRoutineForm} title="Cancel"/>
+                    <Button 
+                        onPress={hideAddRoutineForm} 
+                        title="Cancel"
+                    />
                 </View>
-                <View style={global.buttonWrapper}>
-                    <Button onPress={handleSaveAddRoutine} title="Save"/>
+                <View style={styles.buttonWrapper}>
+                    <Button 
+                        onPress={handleSaveAddRoutine} 
+                        title="Save"
+                        color="#27F106"
+                    />
                 </View>
                 </View> : <View style={global.buttonWrapper}>
                     <Button onPress={showAddRoutineForm} title="Add Routine" />
@@ -111,5 +118,8 @@ const styles = StyleSheet.create({
     routineTitle:{
         fontSize:22,
         marginTop:0,
+    },
+    buttonWrapper:{
+        marginBottom:10,
     }
 })
