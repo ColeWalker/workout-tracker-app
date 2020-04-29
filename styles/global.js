@@ -19,6 +19,7 @@ export const global = StyleSheet.create({
     addButton:{
         borderRadius: 25,
         paddingVertical: 20,
+        marginHorizontal:10,
     },
     modalWrapper:{
         paddingHorizontal: 20,
@@ -55,9 +56,11 @@ export const global = StyleSheet.create({
     saveButton: {
         marginVertical:15,
         padding:10,
+        marginHorizontal:10,
     },
     buttonWrapper:{
         marginTop:15,
         marginBottom:10,
+        elevation:2,
     },
 });
